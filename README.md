@@ -1,6 +1,6 @@
 # HEX Wallet Dapp
 
-Test acocunts
+Test accounts
 
 ```
 0xac28238ae676cb00d55bec84b70786a75245ff1f
