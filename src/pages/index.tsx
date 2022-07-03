@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import { useContractRead, useContractReads } from "wagmi";
-import HEXABI from "../lib/HEXABI.json";
+import HEXABI from "~/abi/HEXABI.json";
 import { useState } from "react";
 
 const Home: NextPage = () => {
