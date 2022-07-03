@@ -1,7 +1,5 @@
 import type { NextPage } from "next";
-import { useContractRead, useContractReads } from "wagmi";
-import HEXABI from "~/abi/HEXABI.json";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { pulseChain } from "~/lib/pulsechain";
 import { chain } from "wagmi";
 import useHexStakes from "~/lib/useHexStakes";
