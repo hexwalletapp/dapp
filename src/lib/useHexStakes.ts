@@ -1,20 +1,13 @@
 import { useContractRead, useContractReads } from "wagmi";
-import HEXABI from "~/abi/HEXABI.json";
-import { HEX_CONTRACT_ADDRESS } from "~/lib/constants";
+import { hexContract } from "~/lib/constants";
 
 const useHexStakes = (stakeAddress: string, chainId: number) => {
   const { data: stakeCount } = useContractRead({
-    addressOrName: HEX_CONTRACT_ADDRESS,
-    contractInterface: HEXABI,
+    ...hexContract,
     functionName: "stakeCount",
     args: stakeAddress,
     chainId: chainId,
   });
-
-  const hexContract = {
-    addressOrName: HEX_CONTRACT_ADDRESS,
-    contractInterface: HEXABI,
-  };
 
   const allStakes = Array.from(
     { length: Number(stakeCount) },
