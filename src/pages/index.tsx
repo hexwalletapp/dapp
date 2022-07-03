@@ -1,52 +1,50 @@
 import type { NextPage } from "next";
 import { useContractRead, useContractReads } from "wagmi";
 import HEXABI from "~/abi/HEXABI.json";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { pulseChain } from "~/lib/pulsechain";
+import { chain } from "wagmi";
+import useHexStakes from "~/lib/useHexStakes";
 
 const Home: NextPage = () => {
   const [stakeAddress, setStakeAddress] = useState("");
-  const { data: stakeCount } = useContractRead({
-    addressOrName: "0x2b591e99afE9f32eAA6214f7B7629768c40Eeb39",
-    contractInterface: HEXABI,
-    functionName: "stakeCount",
-    args: stakeAddress,
-  });
-
-  const hexContract = {
-    addressOrName: "0x2b591e99afE9f32eAA6214f7B7629768c40Eeb39",
-    contractInterface: HEXABI,
-  };
-
-  const allStakes = Array.from(
-    { length: Number(stakeCount) },
-    (v, stakeIndex) => ({
-      ...hexContract,
-      functionName: "stakeLists",
-      args: [stakeAddress, stakeIndex],
-    })
+  const { stakeCount: stakeCountETH, stakes: stakesETH } = useHexStakes(
+    stakeAddress,
+    chain.mainnet.id
   );
-  const { data, isError, isLoading } = useContractReads({
-    contracts: allStakes,
-  });
+  const { stakeCount: stakeCountPLS, stakes: stakesPLS } = useHexStakes(
+    stakeAddress,
+    pulseChain.id
+  );
 
   return (
     <div>
-      <h3>{stakeAddress}</h3>
-      <h4>{stakeCount?.toString()}</h4>
+      <label htmlFor="chain"> Staker Address:</label>
+
       <input
+        title="Stake Address"
         type="text"
         value={stakeAddress}
         onChange={(e) => setStakeAddress(e.target.value)}
       />
-
-      <h4>Stakes</h4>
-      <ul>
-        {data?.map((stake, index) => (
+      <pre>{stakeAddress}</pre>
+      <h4>HEX Stakes: ({stakeCountETH?.toString()})</h4>
+      <ol>
+        {stakesETH?.map((stake, index) => (
           <li key={index}>
             <div>{`${stake}`}</div>
           </li>
         ))}
-      </ul>
+      </ol>
+
+      <h4>PLS Stakes: ({stakeCountPLS?.toString()})</h4>
+      <ol>
+        {stakesPLS?.map((stake, index) => (
+          <li key={index}>
+            <div>{`${stake}`}</div>
+          </li>
+        ))}
+      </ol>
     </div>
   );
 };
