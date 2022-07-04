@@ -1,4 +1,4 @@
-import "~/styles/globals.css";
+import "~/styles/main.css";
 import type { AppProps } from "next/app";
 import { WagmiConfig, createClient, chain, configureChains } from "wagmi";
 import { alchemyProvider } from "wagmi/providers/alchemy";
@@ -22,6 +22,8 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <WagmiConfig client={client}>
       <Layout>
+        <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+
         <Component {...pageProps} />
       </Layout>
     </WagmiConfig>
