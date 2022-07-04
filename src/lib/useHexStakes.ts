@@ -2,7 +2,7 @@ import { useContractRead, useContractReads } from "wagmi";
 import { hexContract } from "~/lib/constants";
 
 const useHexStakes = (stakeAddress: string, chainId: number) => {
-  const { data: stakeCount } = useContractRead({
+  const { data: stakeCount, isLoading: stakeCountIsLoading } = useContractRead({
     ...hexContract,
     functionName: "stakeCount",
     args: stakeAddress,
@@ -19,17 +19,15 @@ const useHexStakes = (stakeAddress: string, chainId: number) => {
     })
   );
 
-  const {
-    data: stakes,
-    isError,
-    isLoading,
-  } = useContractReads({
+  const { data: stakes, isLoading: stakesAreLoading } = useContractReads({
     contracts: allStakes,
   });
 
   return {
     stakeCount: stakeCount,
     stakes: stakes,
+    stakeCountIsLoading: stakeCountIsLoading,
+    stakesAreLoading: stakesAreLoading,
   };
 };
 

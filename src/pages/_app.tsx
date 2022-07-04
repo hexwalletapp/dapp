@@ -4,6 +4,7 @@ import { WagmiConfig, createClient, chain, configureChains } from "wagmi";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 import { pulseChain } from "~/lib/pulsechain";
+import Layout from "~/components/Layout";
 
 const alchemyId = process.env.ALCHEMY_ID;
 
@@ -20,7 +21,9 @@ const client = createClient({
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <WagmiConfig client={client}>
-      <Component {...pageProps} />
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
     </WagmiConfig>
   );
 }
