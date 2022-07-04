@@ -26,10 +26,8 @@ const Home: NextPage = () => {
       stake.lockedDay + stake.stakedDays
     );
 
-    const interestHEX = interestForRange(
-      stakeDailyDataDays,
-      BigInt(stake.stakeShares)
-    );
+    const interestHEX =
+      interestForRange(stakeDailyDataDays, BigInt(stake.stakeShares)) ?? 0;
 
     const bigPayDayHEX = getBigPayDayBonus(
       stake.lockedDay,
@@ -45,12 +43,12 @@ const Home: NextPage = () => {
 
     const interest: LineItem = {
       name: "Interest",
-      valueUSD: interestHEX * hexPrice,
-      valueHEX: interestHEX,
+      valueUSD: Number(interestHEX) * hexPrice,
+      valueHEX: Number(interestHEX),
     };
 
     const bigPayDay: LineItem = {
-      name: "Principal",
+      name: "Big Pay Day",
       valueUSD: Number(bigPayDayHEX) * hexPrice,
       valueHEX: Number(bigPayDayHEX),
     };
@@ -86,7 +84,10 @@ const Home: NextPage = () => {
       <ol>
         {stakes?.map((stake, index) => (
           <li key={index}>
-            <div>{`${stake}`}</div>
+            <div>{`${stake.stakeId}`}</div>
+            {stake.lineItems?.map((lineItem, index) => (
+              <div key={index}>{`${lineItem.name}: ${lineItem.valueHEX}`}</div>
+            ))}
           </li>
         ))}
       </ol>
