@@ -1,5 +1,4 @@
 export interface LineItem {
-  isNewSection: boolean;
   name: string;
   valueUSD: number;
   valueHEX: number;
