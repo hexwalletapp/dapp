@@ -2,8 +2,7 @@ import type { NextPage } from "next";
 import { useState } from "react";
 import { pulseChain } from "~/lib/pulsechain";
 import { chain, chainId } from "wagmi";
-import useHexStakes from "~/lib/useHexStakes";
-import { useHexDailyData } from "~/lib/useHexDailyData";
+import { useHexDailyData, useHexStakes } from "~/lib/hex";
 
 const Home: NextPage = () => {
   const [stakeAddress, setStakeAddress] = useState("");

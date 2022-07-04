@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import { pulseChain } from "~/lib/pulsechain";
 import { chain } from "wagmi";
-import { useHexDailyData } from "~/lib/useHexDailyData";
+import { useHexDailyData } from "~/lib/hex";
 
 const Daily: NextPage = () => {
   const { currentDay: currentDayETH, dailyDataDays: dailyDataDaysETH } =

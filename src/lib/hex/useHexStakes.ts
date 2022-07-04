@@ -1,7 +1,7 @@
 import { useContractRead, useContractReads } from "wagmi";
 import { hexContract } from "~/lib/constants";
 
-const useHexStakes = (stakeAddress: string, chainId: number) => {
+export const useHexStakes = (stakeAddress: string, chainId: number) => {
   const { data: stakeCount, isLoading: stakeCountIsLoading } = useContractRead({
     ...hexContract,
     functionName: "stakeCount",
@@ -30,5 +30,3 @@ const useHexStakes = (stakeAddress: string, chainId: number) => {
     stakesAreLoading: stakesAreLoading,
   };
 };
-
-export default useHexStakes;
