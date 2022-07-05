@@ -2,24 +2,6 @@ import type { Stake, LineItem } from "utils/account-types";
 import { heartsToHex } from "~/lib/converters";
 
 export const StakeCard: React.FC<{ stake: Stake }> = ({ stake }) => {
-  const total: LineItem = {
-    name: "TOTAL",
-    valueUSD: 100,
-    valueHEX: 100,
-  };
-
-  const returnOnInvestment: LineItem = {
-    name: "ROI",
-    valueUSD: 100,
-    valueHEX: 100,
-  };
-
-  const annualPercentageYield: LineItem = {
-    name: "APY",
-    valueUSD: 100,
-    valueHEX: 100,
-  };
-
   const TableLineItem: React.FC<{ lineItem: LineItem }> = ({ lineItem }) => {
     return (
       <tr className="border-b border-gray-50">
@@ -32,7 +14,7 @@ export const StakeCard: React.FC<{ stake: Stake }> = ({ stake }) => {
           {lineItem.valueUSD.toString()}
         </td>
         <td className="hidden py-4 px-3 text-right text-sm font-mono text-gray-600 sm:table-cell">
-          {heartsToHex(lineItem.valueHEX).toString()}
+          {lineItem.valueHEX.toString()}
         </td>
       </tr>
     );
@@ -64,9 +46,16 @@ export const StakeCard: React.FC<{ stake: Stake }> = ({ stake }) => {
           </thead>
 
           <tbody>
-            {stake.lineItems.map((lineItem: LineItem, index: number) => (
-              <TableLineItem key={index} lineItem={lineItem} />
-            ))}
+            {stake.lineItems
+              .filter(
+                (lineItem) =>
+                  lineItem.name.toLowerCase() === "principal" ||
+                  lineItem.name.toLowerCase() === "interest" ||
+                  lineItem.name.toLowerCase() === "big pay day"
+              )
+              .map((lineItem: LineItem, index: number) => (
+                <TableLineItem key={index} lineItem={lineItem} />
+              ))}
           </tbody>
           <tfoot>
             <th
@@ -74,14 +63,26 @@ export const StakeCard: React.FC<{ stake: Stake }> = ({ stake }) => {
               scope="row"
               colSpan={3}
             ></th>
-            <TableLineItem lineItem={total} />
+            {/* // where name is "TOTAL" */}
+            {stake.lineItems
+              .filter((lineItem) => lineItem.name.toLowerCase() === "total")
+              .map((lineItem: LineItem, index: number) => (
+                <TableLineItem key={index} lineItem={lineItem} />
+              ))}
             <th
               className="border-b border-gray-300"
               scope="row"
               colSpan={3}
             ></th>
-            <TableLineItem lineItem={returnOnInvestment} />
-            <TableLineItem lineItem={annualPercentageYield} />
+            {stake.lineItems
+              .filter(
+                (lineItem) =>
+                  lineItem.name.toLowerCase() === "apy" ||
+                  lineItem.name.toLowerCase() === "roi"
+              )
+              .map((lineItem: LineItem, index: number) => (
+                <TableLineItem key={index} lineItem={lineItem} />
+              ))}
           </tfoot>
         </table>
       </div>

@@ -1,7 +1,7 @@
 export interface LineItem {
   name: string;
-  valueUSD: number;
-  valueHEX: number;
+  valueUSD: string;
+  valueHEX: string;
 }
 
 export interface Stake {

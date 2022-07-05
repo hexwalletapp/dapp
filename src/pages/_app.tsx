@@ -1,17 +1,8 @@
 import "~/styles/main.css";
 import type { AppProps } from "next/app";
-import { WagmiConfig, createClient, chain, configureChains } from "wagmi";
-import { alchemyProvider } from "wagmi/providers/alchemy";
-import { publicProvider } from "wagmi/providers/public";
-import { pulseChain } from "~/lib/pulsechain";
+import { WagmiConfig, createClient } from "wagmi";
 import Layout from "~/components/Layout";
-
-const alchemyId = process.env.ALCHEMY_ID;
-
-const { provider } = configureChains(
-  [chain.mainnet, pulseChain],
-  [alchemyProvider({ alchemyId }), publicProvider()]
-);
+import { provider } from "~/lib/provider";
 
 const client = createClient({
   autoConnect: true,

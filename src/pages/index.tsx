@@ -1,13 +1,16 @@
 import type { NextPage } from "next";
 import type { Stake, LineItem } from "utils/account-types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { chain } from "wagmi";
 import { useHexDailyData, useHexStakes } from "~/lib/hex";
+import { getHexPrice } from "~/lib/uniswap/helpers";
 import { getBigPayDayBonus, interestForRange } from "~/lib/hex/helpers";
 import { DAY_ONE_START, ONE_DAY } from "~/lib/constants";
 import { StakeCard } from "~/components/ui/StakeCard";
+import { heartsToHex, format } from "~/lib/utils";
+
 const Home: NextPage = () => {
-  const [hexPrice] = useState<number>(1);
+  const [hexPrice, setHexPrice] = useState<number>(0);
   const [stakeAddress, setStakeAddress] = useState("");
   const { currentDay, dailyDataDays } = useHexDailyData(chain.mainnet.id);
   const { stakeCount: stakeCountETH, stakes: stakesETH } = useHexStakes(
@@ -15,42 +18,49 @@ const Home: NextPage = () => {
     chain.mainnet.id
   );
 
-  // const { stakeCount: stakeCountPLS, stakes: stakesPLS } = useHexStakes(
-  //   stakeAddress,
-  //   pulseChain.id
-  // );
-
   const stakes = stakesETH?.map((stake: any) => {
     const stakeDailyDataDays = dailyDataDays?.slice(
       stake.lockedDay,
       stake.lockedDay + stake.stakedDays
     );
 
-    const interestHEX =
-      interestForRange(stakeDailyDataDays, BigInt(stake.stakeShares)) ?? 0;
+    // Principal
+    const principalHEX = heartsToHex(Number(stake.stakeShares));
+    const principal: LineItem = {
+      name: "PRINCIPAL",
+      valueUSD: "$" + format(principalHEX * hexPrice),
+      valueHEX: format(principalHEX),
+    };
 
-    const bigPayDayHEX = getBigPayDayBonus(
+    // Interest
+    const interestHearts =
+      interestForRange(stakeDailyDataDays, BigInt(stake.stakeShares)) ?? 0;
+    const interestHEX = heartsToHex(Number(interestHearts));
+    const interest: LineItem = {
+      name: "INTEREST",
+      valueUSD: "$" + format(interestHEX * hexPrice),
+      valueHEX: format(interestHEX),
+    };
+
+    // Big Pay Day
+    const bigPayDayHearts = getBigPayDayBonus(
       stake.lockedDay,
       stake.stakedDays,
       BigInt(stake.stakeShares)
     );
-
-    const principal: LineItem = {
-      name: "PRINCIPAL",
-      valueUSD: stake.stakeShares * hexPrice,
-      valueHEX: stake.stakeShares,
-    };
-
-    const interest: LineItem = {
-      name: "INTEREST",
-      valueUSD: Number(interestHEX) * hexPrice,
-      valueHEX: Number(interestHEX),
-    };
-
+    const bigPayDayHEX = heartsToHex(Number(bigPayDayHearts));
     const bigPayDay: LineItem = {
       name: "BIG PAY DAY",
-      valueUSD: Number(bigPayDayHEX) * hexPrice,
-      valueHEX: Number(bigPayDayHEX),
+      valueUSD: "$" + format(bigPayDayHEX * hexPrice),
+      valueHEX: format(bigPayDayHEX),
+    };
+
+    // Total
+    const totalHEX = principalHEX + interestHEX + bigPayDayHEX;
+    const total: LineItem = {
+      name: "TOTAL",
+      valueUSD: "$" + format(totalHEX * hexPrice),
+      valueHEX: format(totalHEX),
     };
 
     const currentStake: Stake = {
@@ -60,10 +70,20 @@ const Home: NextPage = () => {
       endDate: DAY_ONE_START + (stake.lockedDay + stake.stakedDays) * ONE_DAY,
       percentComplete: 0,
       shares: stake.stakeShares,
-      lineItems: [principal, interest, bigPayDay],
+      lineItems: [principal, interest, bigPayDay, total],
     };
     return currentStake;
   });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const trade = await getHexPrice();
+      setHexPrice(
+        Number(trade.expectedConvertQuote) / Number(trade.baseConvertRequest)
+      );
+    };
+    fetchData();
+  }, [stakes]);
 
   return (
     <div>
@@ -82,10 +102,13 @@ const Home: NextPage = () => {
       />
       <pre>{stakeAddress}</pre>
 
-      <h4>
-        HEX Stakes:
-        {stakeCountETH?.toString()}
-      </h4>
+      <label> HEX Stakes: </label>
+      <output>{stakeCountETH?.toString()}</output>
+
+      <br></br>
+
+      <label>HEX Price: </label>
+      <output>${format(hexPrice)}</output>
 
       <div className="grid grid-cols-3 gap-4">
         {stakes?.map((stake: Stake, index: number) => (
@@ -95,15 +118,6 @@ const Home: NextPage = () => {
           </div>
         ))}
       </div>
-
-      {/* <h4>PLS Stakes: ({stakeCountPLS?.toString()})</h4>
-      <ol>
-        {stakesPLS?.map((stake, index) => (
-          <li key={index}>
-            <div>{`${stake}`}</div>
-          </li>
-        ))}
-      </ol> */}
     </div>
   );
 };
