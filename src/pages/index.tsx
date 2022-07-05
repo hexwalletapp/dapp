@@ -5,7 +5,7 @@ import { chain } from "wagmi";
 import { useHexDailyData, useHexStakes } from "~/lib/hex";
 import { getBigPayDayBonus, interestForRange } from "~/lib/hex/helpers";
 import { DAY_ONE_START, ONE_DAY } from "~/lib/constants";
-
+import { StakeCard } from "~/components/ui/StakeCard";
 const Home: NextPage = () => {
   const [hexPrice] = useState<number>(1);
   const [stakeAddress, setStakeAddress] = useState("");
@@ -36,19 +36,19 @@ const Home: NextPage = () => {
     );
 
     const principal: LineItem = {
-      name: "Principal",
+      name: "PRINCIPAL",
       valueUSD: stake.stakeShares * hexPrice,
       valueHEX: stake.stakeShares,
     };
 
     const interest: LineItem = {
-      name: "Interest",
+      name: "INTEREST",
       valueUSD: Number(interestHEX) * hexPrice,
       valueHEX: Number(interestHEX),
     };
 
     const bigPayDay: LineItem = {
-      name: "Big Pay Day",
+      name: "BIG PAY DAY",
       valueUSD: Number(bigPayDayHEX) * hexPrice,
       valueHEX: Number(bigPayDayHEX),
     };
@@ -67,11 +67,16 @@ const Home: NextPage = () => {
 
   return (
     <div>
-      <label htmlFor="chain"> Staker Address:</label>
+      <label htmlFor="chain">Staker Address: </label>
 
       <input
         title="Stake Address"
-        type="text"
+        className="input bg-gray-100 w-full max-w-md"
+        type="input"
+        placeholder="0x..."
+        autoComplete="off"
+        autoCapitalize="off"
+        autoCorrect="off"
         value={stakeAddress}
         onChange={(e) => setStakeAddress(e.target.value)}
       />
@@ -81,16 +86,15 @@ const Home: NextPage = () => {
         HEX Stakes:
         {stakeCountETH?.toString()}
       </h4>
-      <ol>
-        {stakes?.map((stake, index) => (
-          <li key={index}>
-            <div>{`${stake.stakeId}`}</div>
-            {stake.lineItems?.map((lineItem, index) => (
-              <div key={index}>{`${lineItem.name}: ${lineItem.valueHEX}`}</div>
-            ))}
-          </li>
+
+      <div className="grid grid-cols-3 gap-4">
+        {stakes?.map((stake: Stake, index: number) => (
+          <div key={index}>
+            {/* <div>{stake.stakeId}</div> */}
+            <StakeCard stake={stake} />
+          </div>
         ))}
-      </ol>
+      </div>
 
       {/* <h4>PLS Stakes: ({stakeCountPLS?.toString()})</h4>
       <ol>
