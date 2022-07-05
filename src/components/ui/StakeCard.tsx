@@ -1,5 +1,4 @@
 import type { Stake, LineItem } from "utils/account-types";
-import { heartsToHex } from "~/lib/converters";
 
 export const StakeCard: React.FC<{ stake: Stake }> = ({ stake }) => {
   const TableLineItem: React.FC<{ lineItem: LineItem }> = ({ lineItem }) => {
@@ -11,10 +10,10 @@ export const StakeCard: React.FC<{ stake: Stake }> = ({ stake }) => {
           </div>
         </td>
         <td className="hidden py-4 px-3 text-right text-sm font-mono text-gray-600 sm:table-cell">
-          {lineItem.valueUSD.toString()}
+          {lineItem.valueUSD}
         </td>
         <td className="hidden py-4 px-3 text-right text-sm font-mono text-gray-600 sm:table-cell">
-          {lineItem.valueHEX.toString()}
+          {lineItem.valueHEX}
         </td>
       </tr>
     );
