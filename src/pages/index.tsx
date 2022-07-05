@@ -108,7 +108,7 @@ const Home: NextPage = () => {
   }, [stakes]);
 
   return (
-    <div>
+    <div className="pt-4 m-4">
       <label htmlFor="chain">Staker Address: </label>
 
       <input
@@ -118,7 +118,7 @@ const Home: NextPage = () => {
         placeholder="0x..."
         autoComplete="off"
         autoCapitalize="off"
-        autoCorrect="off"
+        // autoCorrect="off"
         value={stakeAddress}
         onChange={(e) => setStakeAddress(e.target.value)}
       />
@@ -132,7 +132,7 @@ const Home: NextPage = () => {
       <label>HEX Price: </label>
       <output>${format(hexPrice)}</output>
 
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
         {stakes?.map((stake: Stake, index: number) => (
           <div key={index}>
             {/* <div>{stake.stakeId}</div> */}

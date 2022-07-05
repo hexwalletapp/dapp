@@ -9,10 +9,10 @@ export const StakeCard: React.FC<{ stake: Stake }> = ({ stake }) => {
             {lineItem.name}
           </div>
         </td>
-        <td className="hidden py-4 px-3 text-right text-sm font-mono text-gray-600 sm:table-cell">
+        <td className="py-4 px-3 text-right text-sm font-mono text-gray-600">
           {lineItem.valueUSD}
         </td>
-        <td className="hidden py-4 px-3 text-right text-sm font-mono text-gray-600 sm:table-cell">
+        <td className="py-4 px-3 text-right text-sm font-mono text-gray-600">
           {lineItem.valueHEX}
         </td>
       </tr>
@@ -20,7 +20,7 @@ export const StakeCard: React.FC<{ stake: Stake }> = ({ stake }) => {
   };
 
   return (
-    <div className="card card-compact shadow-xl text-primary-content">
+    <div className="card card-compact shadow-xl text-primary-content bg-white pt-4">
       <div className="card-body">
         <table className="min-w-full divide-y divide-gray-300">
           <thead>
@@ -31,7 +31,7 @@ export const StakeCard: React.FC<{ stake: Stake }> = ({ stake }) => {
               ></th>
               <th
                 scope="col"
-                className="hidden py-3.5 px-3 text-right text-sm font-semibold text-gray-400 sm:table-cell small-caps"
+                className="py-3.5 px-3 text-right text-sm font-semibold text-gray-400 small-caps"
               >
                 USD
               </th>
