@@ -18,7 +18,7 @@ export const useHexDailyData = (chainId: number) => {
   });
 
   return {
-    currentDay: currentDay,
+    currentDay: Number(currentDay),
     dailyDataDays: dailyDataDays,
   };
 };

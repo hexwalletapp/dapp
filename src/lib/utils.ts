@@ -12,4 +12,9 @@ const format = (num: number, maxFracDigits = 3) => {
   }).format(num);
 };
 
-export { format, heartsToHex };
+// percent formatter
+const formatPercent = (num: number) => {
+  return format(num * 100, 2) + "%";
+};
+
+export { format, heartsToHex, formatPercent };

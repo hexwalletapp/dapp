@@ -7,7 +7,7 @@ import { getHexPrice } from "~/lib/uniswap/helpers";
 import { getBigPayDayBonus, interestForRange } from "~/lib/hex/helpers";
 import { DAY_ONE_START, ONE_DAY } from "~/lib/constants";
 import { StakeCard } from "~/components/ui/StakeCard";
-import { heartsToHex, format } from "~/lib/utils";
+import { heartsToHex, format, formatPercent } from "~/lib/utils";
 
 const Home: NextPage = () => {
   const [hexPrice, setHexPrice] = useState<number>(0);
@@ -19,6 +19,7 @@ const Home: NextPage = () => {
   );
 
   const stakes = stakesETH?.map((stake: any) => {
+    const daysStaked = currentDay - Number(stake.lockedDay);
     const stakeDailyDataDays = dailyDataDays?.slice(
       stake.lockedDay,
       stake.lockedDay + stake.stakedDays
@@ -26,9 +27,10 @@ const Home: NextPage = () => {
 
     // Principal
     const principalHEX = heartsToHex(Number(stake.stakeShares));
+    const principalUSD = principalHEX * hexPrice;
     const principal: LineItem = {
       name: "PRINCIPAL",
-      valueUSD: "$" + format(principalHEX * hexPrice),
+      valueUSD: "$" + format(principalUSD),
       valueHEX: format(principalHEX),
     };
 
@@ -36,9 +38,10 @@ const Home: NextPage = () => {
     const interestHearts =
       interestForRange(stakeDailyDataDays, BigInt(stake.stakeShares)) ?? 0;
     const interestHEX = heartsToHex(Number(interestHearts));
+    const interestUSD = interestHEX * hexPrice;
     const interest: LineItem = {
       name: "INTEREST",
-      valueUSD: "$" + format(interestHEX * hexPrice),
+      valueUSD: "$" + format(interestUSD),
       valueHEX: format(interestHEX),
     };
 
@@ -57,10 +60,29 @@ const Home: NextPage = () => {
 
     // Total
     const totalHEX = principalHEX + interestHEX + bigPayDayHEX;
+    const totalUSD = totalHEX * hexPrice;
     const total: LineItem = {
       name: "TOTAL",
-      valueUSD: "$" + format(totalHEX * hexPrice),
+      valueUSD: "$" + format(totalUSD),
       valueHEX: format(totalHEX),
+    };
+
+    // ROI
+    const roiHEX = interestHEX / principalHEX;
+    const roiUSD = interestUSD / principalUSD;
+    const roi: LineItem = {
+      name: "ROI",
+      valueUSD: formatPercent(roiUSD),
+      valueHEX: formatPercent(roiHEX),
+    };
+
+    // APY
+    const apyHEX = (roiHEX * 365) / daysStaked;
+    const apyUSD = (roiUSD * 365) / daysStaked;
+    const apy: LineItem = {
+      name: "APY",
+      valueUSD: formatPercent(apyUSD),
+      valueHEX: formatPercent(apyHEX),
     };
 
     const currentStake: Stake = {
@@ -70,7 +92,7 @@ const Home: NextPage = () => {
       endDate: DAY_ONE_START + (stake.lockedDay + stake.stakedDays) * ONE_DAY,
       percentComplete: 0,
       shares: stake.stakeShares,
-      lineItems: [principal, interest, bigPayDay, total],
+      lineItems: [principal, interest, bigPayDay, total, roi, apy],
     };
     return currentStake;
   });
