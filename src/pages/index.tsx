@@ -130,9 +130,7 @@ const Home: NextPage = () => {
         value={stakeAddress}
         onChange={(e) => setStakeAddress(e.target.value.trim())}
       />
-      <pre>{stakeAddress}</pre>
 
-      <label> HEX Stakes: </label>
       <output>{stakeCountETH?.toString()}</output>
 
       <br></br>

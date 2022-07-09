@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-
+import Meta from "~/components/Meta";
 const Layout = ({ children }: any) => {
   const [mounted, setMounted] = useState(false);
 
@@ -11,7 +11,12 @@ const Layout = ({ children }: any) => {
     return null;
   }
 
-  return <div>{children}</div>;
+  return (
+    <div>
+      <Meta />
+      {children}
+    </div>
+  );
 };
 
 export default Layout;
