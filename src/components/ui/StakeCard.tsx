@@ -19,9 +19,33 @@ export const StakeCard: React.FC<{ stake: Stake }> = ({ stake }) => {
     );
   };
 
+  const progressStyle: any = {
+    "--value": stake.percentComplete,
+  };
+
   return (
     <div className="card card-compact shadow-xl text-primary-content bg-white pt-4">
       <div className="card-body">
+        <div className="flex flex-1">
+          <div
+            className="radial-progress text-primary --value:50;"
+            style={progressStyle}
+          >
+            {`${stake.percentComplete}%`}
+          </div>
+          <div className="flex flex-1 flex-col min-w-0 flex-y-4">
+            {/* <div className="text-base text-gray-900 text-right">
+              {stake.status}
+            </div> */}
+            <p className="text-xl font-medium text-gray-900 text-right">
+              {stake.shares}
+            </p>
+            <p className="text-base text-gray-500 truncate text-right">
+              {stake.startDate} - {stake.endDate}
+            </p>
+          </div>
+        </div>
+
         <table className="min-w-full divide-y divide-gray-300">
           <thead>
             <tr>
@@ -43,7 +67,6 @@ export const StakeCard: React.FC<{ stake: Stake }> = ({ stake }) => {
               </th>
             </tr>
           </thead>
-
           <tbody>
             {stake.lineItems
               .filter(

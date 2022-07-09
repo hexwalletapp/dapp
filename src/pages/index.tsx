@@ -5,9 +5,14 @@ import { chain } from "wagmi";
 import { useHexDailyData, useHexStakes } from "~/lib/hex";
 import { getHexPrice } from "~/lib/uniswap/helpers";
 import { getBigPayDayBonus, interestForRange } from "~/lib/hex/helpers";
-import { DAY_ONE_START, ONE_DAY } from "~/lib/constants";
 import { StakeCard } from "~/components/ui/StakeCard";
-import { heartsToHex, format, formatPercent } from "~/lib/utils";
+import {
+  heartsToHex,
+  format,
+  formatPercent,
+  dayToFormattedDate,
+  sharesToSI,
+} from "~/lib/utils";
 
 const Home: NextPage = () => {
   const [hexPrice, setHexPrice] = useState<number>(0);
@@ -85,13 +90,16 @@ const Home: NextPage = () => {
       valueHEX: formatPercent(apyHEX),
     };
 
+    const percentComplete = Number(
+      format(((currentDay - stake.lockedDay) / stake.stakedDays) * 100, 1)
+    );
     const currentStake: Stake = {
       stakeId: stake.stakeId,
       status: "active",
-      startDate: DAY_ONE_START + stake.lockedDay * ONE_DAY,
-      endDate: DAY_ONE_START + (stake.lockedDay + stake.stakedDays) * ONE_DAY,
-      percentComplete: 0,
-      shares: stake.stakeShares,
+      startDate: dayToFormattedDate(stake.lockedDay),
+      endDate: dayToFormattedDate(stake.lockedDay + stake.stakedDays),
+      percentComplete: percentComplete,
+      shares: sharesToSI(stake.stakeShares),
       lineItems: [principal, interest, bigPayDay, total, roi, apy],
     };
     return currentStake;
@@ -120,7 +128,7 @@ const Home: NextPage = () => {
         autoCapitalize="off"
         // autoCorrect="off"
         value={stakeAddress}
-        onChange={(e) => setStakeAddress(e.target.value)}
+        onChange={(e) => setStakeAddress(e.target.value.trim())}
       />
       <pre>{stakeAddress}</pre>
 
@@ -135,7 +143,6 @@ const Home: NextPage = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
         {stakes?.map((stake: Stake, index: number) => (
           <div key={index}>
-            {/* <div>{stake.stakeId}</div> */}
             <StakeCard stake={stake} />
           </div>
         ))}

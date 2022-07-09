@@ -7,9 +7,9 @@ export interface LineItem {
 export interface Stake {
   stakeId: number;
   status: string;
-  startDate: number;
-  endDate: number;
+  startDate: string;
+  endDate: string;
   percentComplete: number;
-  shares: number;
+  shares: string;
   lineItems: LineItem[];
 }
