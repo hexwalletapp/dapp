@@ -24,7 +24,7 @@ export const StakeCard: React.FC<{ stake: Stake }> = ({ stake }) => {
   };
 
   return (
-    <div className="card card-compact shadow-xl text-primary-content bg-white pt-4">
+    <div className="card card-compact shadow-xl text-primary-content bg-white pt-6">
       <div className="card-body">
         <div className="flex flex-1">
           <div

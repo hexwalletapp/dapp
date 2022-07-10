@@ -116,34 +116,42 @@ const Home: NextPage = () => {
   }, [stakes]);
 
   return (
-    <div className="pt-4 m-4">
-      <label htmlFor="chain">Staker Address: </label>
+    <div>
+      <div className="md:pl-64 flex flex-col flex-1">
+        <main className="flex-1">
+          <div className="py-6">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+              <label htmlFor="chain">Staker Address: </label>
 
-      <input
-        title="Stake Address"
-        className="input bg-gray-100 w-full max-w-md"
-        type="input"
-        placeholder="0x..."
-        autoComplete="off"
-        autoCapitalize="off"
-        // autoCorrect="off"
-        value={stakeAddress}
-        onChange={(e) => setStakeAddress(e.target.value.trim())}
-      />
+              <input
+                title="Stake Address"
+                className="input bg-gray-100 w-full max-w-md"
+                type="input"
+                placeholder="0x..."
+                autoComplete="off"
+                autoCapitalize="off"
+                // autoCorrect="off"
+                value={stakeAddress}
+                onChange={(e) => setStakeAddress(e.target.value.trim())}
+              />
 
-      <output>{stakeCountETH?.toString()}</output>
+              <output>{stakeCountETH?.toString()}</output>
 
-      <br></br>
+              <br></br>
 
-      <label>HEX Price: </label>
-      <output>${format(hexPrice)}</output>
+              <label>HEX Price: </label>
+              <output>${format(hexPrice)}</output>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
-        {stakes?.map((stake: Stake, index: number) => (
-          <div key={index}>
-            <StakeCard stake={stake} />
+              <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
+                {stakes?.map((stake: Stake, index: number) => (
+                  <div key={index}>
+                    <StakeCard stake={stake} />
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
-        ))}
+        </main>
       </div>
     </div>
   );
