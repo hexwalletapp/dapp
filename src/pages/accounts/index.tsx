@@ -15,7 +15,12 @@ import {
 } from "~/lib/utils";
 import { Menu, Transition } from "@headlessui/react";
 import { BookmarkIcon, MenuAlt2Icon } from "@heroicons/react/outline";
-import { SearchIcon } from "@heroicons/react/solid";
+import {
+  SearchIcon,
+  StarIcon,
+  ViewGridIcon,
+  ViewListIcon,
+} from "@heroicons/react/solid";
 import SideMenuContext from "~/contexts/SideMenuContext";
 
 const userNavigation = [
@@ -32,6 +37,7 @@ const Accounts: NextPage = () => {
   const { setSidebarOpen } = useContext(SideMenuContext);
   const [hexPrice, setHexPrice] = useState<number>(0);
   const [stakeAddress, setStakeAddress] = useState("");
+  const [disableFilters, setDisableFilters] = useState(true);
   const { currentDay, dailyDataDays } = useHexDailyData(chain.mainnet.id);
   const { stakeCount: stakeCountETH, stakes: stakesETH } = useHexStakes(
     stakeAddress,
@@ -121,6 +127,9 @@ const Accounts: NextPage = () => {
   });
 
   useEffect(() => {
+    if (stakes && stakes?.length > 0) {
+      setDisableFilters(false);
+    }
     const fetchData = async () => {
       const trade = await getHexPrice();
       setHexPrice(
@@ -128,7 +137,7 @@ const Accounts: NextPage = () => {
       );
     };
     fetchData();
-  }, [stakes]);
+  }, [stakes, setDisableFilters]);
 
   return (
     <>
@@ -164,15 +173,7 @@ const Accounts: NextPage = () => {
                   </div>
                 </form>
               </div>
-              <div className="ml-4 flex items-center md:ml-6">
-                <button
-                  type="button"
-                  className="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                >
-                  <span className="sr-only">Bookmark</span>
-                  <BookmarkIcon className="h-6 w-6" aria-hidden="true" />
-                </button>
-
+              <div className="ml-32 flex items-center md:ml-32 space-x-4">
                 {/* Profile dropdown */}
                 <Menu as="div" className="ml-3 relative">
                   <div>
@@ -219,6 +220,46 @@ const Accounts: NextPage = () => {
 
           <main className="flex-1">
             <div className="py-6">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 pb-6">
+                <div className="flex space-x-4">
+                  <input
+                    title="Stake Address"
+                    className="input shadow-lg w-full max-w-md"
+                    type="text"
+                    placeholder="0x..."
+                    autoComplete="off"
+                    autoCapitalize="off"
+                    // autoCorrect="off"
+                    value={stakeAddress}
+                    onChange={(e) => setStakeAddress(e.target.value.trim())}
+                  />
+
+                  <select className="select shadow-lg max-w-xs">
+                    <option selected>Ethereum</option>
+                    <option>Pulse</option>
+                  </select>
+
+                  <button className="btn shadow-lg" disabled={disableFilters}>
+                    <BookmarkIcon className="h-6 w-6" aria-hidden="true" />
+                  </button>
+
+                  <button className="btn shadow-lg" disabled={disableFilters}>
+                    <StarIcon className="h-6 w-6" aria-hidden="true" />
+                  </button>
+
+                  <div className="btn-group shadow-lg">
+                    <button
+                      className="btn btn-active"
+                      disabled={disableFilters}
+                    >
+                      <ViewGridIcon className="h-6 w-6" aria-hidden="true" />
+                    </button>
+                    <button className="btn" disabled={disableFilters}>
+                      <ViewListIcon className="h-6 w-6" aria-hidden="true" />
+                    </button>
+                  </div>
+                </div>
+              </div>
               <div className="px-4 sm:px-6 md:px-8">
                 {/* Replace with your content */}
                 <div className="grid lg:grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-6">
