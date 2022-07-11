@@ -29,10 +29,6 @@ const userNavigation = [
   { name: "Sign out", href: "#" },
 ];
 
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
-
 const Accounts: NextPage = () => {
   const [hexPrice, setHexPrice] = useState<number>(0);
   const [stakeAddress, setStakeAddress] = useState("");
