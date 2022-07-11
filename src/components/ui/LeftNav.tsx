@@ -1,25 +1,19 @@
 import { Fragment, useState, useContext } from "react";
-import { Dialog, Menu, Transition } from "@headlessui/react";
+import { Dialog, Transition } from "@headlessui/react";
 import {
-  BellIcon,
-  CalendarIcon,
-  ChartBarIcon,
   CreditCardIcon,
   FolderIcon,
-  HomeIcon,
-  InboxIcon,
-  MenuAlt2Icon,
   TrendingUpIcon,
-  UsersIcon,
   XIcon,
 } from "@heroicons/react/outline";
 import { SearchIcon } from "@heroicons/react/solid";
 import SideMenuContext from "~/contexts/SideMenuContext";
 
 const navigation = [
-  { name: "Chart", href: "/charts", icon: TrendingUpIcon, current: true },
-  { name: "Account", href: "/accounts", icon: CreditCardIcon, current: false },
-  { name: "Plan", href: "/plans", icon: FolderIcon, current: false },
+  { name: "Search", href: "/", icon: SearchIcon, current: true },
+  { name: "Charts", href: "/charts", icon: TrendingUpIcon, current: false },
+  { name: "Accounts", href: "/accounts", icon: CreditCardIcon, current: false },
+  { name: "Plans", href: "/plans", icon: FolderIcon, current: false },
 ];
 const userNavigation = [
   { name: "Your Profile", href: "#" },

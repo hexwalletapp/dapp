@@ -5,3 +5,7 @@
 .small-caps {
   font-variant: small-caps;
 }
+
+.menu-extra-action {
+  @apply shadow-xl hidden lg:block;
+}

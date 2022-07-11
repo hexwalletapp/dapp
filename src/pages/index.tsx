@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import type { Stake, LineItem } from "utils/account-types";
-import { useEffect, useState } from "react";
+import { Fragment, useState, useContext, useEffect } from "react";
 import { chain } from "wagmi";
 import { useHexDailyData, useHexStakes } from "~/lib/hex";
 import { getHexPrice } from "~/lib/uniswap/helpers";
@@ -13,10 +13,32 @@ import {
   dayToFormattedDate,
   sharesToSI,
 } from "~/lib/utils";
+import { Menu, Transition } from "@headlessui/react";
+import { BookmarkIcon, LinkIcon, StarIcon } from "@heroicons/react/outline";
+import {
+  ViewGridIcon,
+  ViewListIcon,
+  MenuAlt2Icon,
+  DotsVerticalIcon,
+  ViewGridAddIcon,
+} from "@heroicons/react/solid";
+import SideMenuContext from "~/contexts/SideMenuContext";
 
-const Home: NextPage = () => {
+const userNavigation = [
+  { name: "Your Profile", href: "#" },
+  { name: "Settings", href: "#" },
+  { name: "Sign out", href: "#" },
+];
+
+function classNames(...classes) {
+  return classes.filter(Boolean).join(" ");
+}
+
+const Accounts: NextPage = () => {
+  const { setSidebarOpen } = useContext(SideMenuContext);
   const [hexPrice, setHexPrice] = useState<number>(0);
   const [stakeAddress, setStakeAddress] = useState("");
+  const [disableFilters, setDisableFilters] = useState(true);
   const { currentDay, dailyDataDays } = useHexDailyData(chain.mainnet.id);
   const { stakeCount: stakeCountETH, stakes: stakesETH } = useHexStakes(
     stakeAddress,
@@ -106,6 +128,9 @@ const Home: NextPage = () => {
   });
 
   useEffect(() => {
+    if (stakes && stakes?.length > 0) {
+      setDisableFilters(false);
+    }
     const fetchData = async () => {
       const trade = await getHexPrice();
       setHexPrice(
@@ -113,20 +138,27 @@ const Home: NextPage = () => {
       );
     };
     fetchData();
-  }, [stakes]);
+  }, [stakes, setDisableFilters]);
 
   return (
-    <div>
-      <div className="md:pl-64 flex flex-col flex-1">
-        <main className="flex-1">
-          <div className="py-6">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-              <label htmlFor="chain">Staker Address: </label>
+    <>
+      <div>
+        <div className="md:pl-64 flex flex-col flex-1">
+          <div className="navbar py-4 px-4 sm:px-6 md:pl-2">
+            <div className="flex-1 flex space-x-4 pr-4">
+              <button
+                type="button"
+                className="btn shadow-lg md:hidden"
+                onClick={() => setSidebarOpen(true)}
+              >
+                <span className="sr-only">Open sidebar</span>
+                <MenuAlt2Icon className="h-6 w-6" aria-hidden="true" />
+              </button>
 
               <input
                 title="Stake Address"
-                className="input bg-gray-100 w-full max-w-md"
-                type="input"
+                className="input shadow-lg w-full max-w-md"
+                type="text"
                 placeholder="0x..."
                 autoComplete="off"
                 autoCapitalize="off"
@@ -134,27 +166,120 @@ const Home: NextPage = () => {
                 value={stakeAddress}
                 onChange={(e) => setStakeAddress(e.target.value.trim())}
               />
+            </div>
+            <div className="flex-none flex space-x-4">
+              <div className="dropdown dropdown-end lg:hidden">
+                <label tabIndex={0} className="btn m-1 shadow-xl ">
+                  <DotsVerticalIcon className="h-6 w-6" />
+                </label>
+                <ul
+                  tabIndex={0}
+                  className="dropdown-content menu p-2 shadow bg-base-100 rounded-box"
+                >
+                  <li className="disabled">
+                    <label>
+                      <LinkIcon className="h-6 w-6" aria-hidden="true" />
+                      Chain
+                    </label>
+                    <ul className="-ml-64 p-2 shadow bg-base-100 rounded-box">
+                      <li>
+                        <a>Ethereum</a>
+                      </li>
+                      <li>
+                        <a>PulseChain</a>
+                      </li>
+                    </ul>
+                  </li>
+                  <li className="disabled">
+                    <a className="gap-2">
+                      <BookmarkIcon className="h-6 w-6" aria-hidden="true" />
+                      Bookmark
+                    </a>
+                  </li>
+                  <li className="disabled">
+                    <a className="gap-2">
+                      <StarIcon className="h-6 w-6" aria-hidden="true" />
+                      Favorite
+                    </a>
+                  </li>
+                  <li className="disabled">
+                    <span>
+                      <ViewGridIcon className="h-6 w-6" aria-hidden="true" />
+                      Grid
+                    </span>
+                    <ul className="-ml-64 p-2 shadow bg-base-100 rounded-box">
+                      <li>
+                        <a>
+                          <ViewGridAddIcon
+                            className="h-6 w-6"
+                            aria-hidden="true"
+                          />
+                          Grid
+                        </a>
+                      </li>
+                      <li>
+                        <a>
+                          <ViewListIcon
+                            className="h-6 w-6"
+                            aria-hidden="true"
+                          />
+                          List
+                        </a>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
 
-              <output>{stakeCountETH?.toString()}</output>
+              <select className="select max-w-xs menu-extra-action">
+                <option selected>Ethereum</option>
+                <option>Pulse</option>
+              </select>
 
-              <br></br>
+              <button
+                className="btn menu-extra-action"
+                disabled={disableFilters}
+              >
+                <BookmarkIcon className="h-6 w-6" aria-hidden="true" />
+              </button>
 
-              <label>HEX Price: </label>
-              <output>${format(hexPrice)}</output>
+              <button
+                className="btn menu-extra-action"
+                disabled={disableFilters}
+              >
+                <StarIcon className="h-6 w-6" aria-hidden="true" />
+              </button>
 
-              <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
-                {stakes?.map((stake: Stake, index: number) => (
-                  <div key={index}>
-                    <StakeCard stake={stake} />
-                  </div>
-                ))}
+              <div className="btn-group menu-extra-action">
+                <button className="btn btn-active" disabled={disableFilters}>
+                  <ViewGridIcon className="h-6 w-6" aria-hidden="true" />
+                </button>
+                <button className="btn" disabled={disableFilters}>
+                  <ViewListIcon className="h-6 w-6" aria-hidden="true" />
+                </button>
               </div>
             </div>
           </div>
-        </main>
+
+          <main className="flex-1">
+            <div className="py-6">
+              <div className="px-4 sm:px-6 md:px-6">
+                {/* Replace with your content */}
+                <div className="grid lg:grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-6">
+                  {stakes?.map((stake: Stake, index: number) => (
+                    <div key={index}>
+                      <StakeCard stake={stake} />
+                    </div>
+                  ))}
+                </div>
+                {/* /End replace */}
+              </div>
+            </div>
+          </main>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
-export default Home;
+export default Accounts;
