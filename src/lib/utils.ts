@@ -4,6 +4,7 @@ import {
   UNITS,
   SI_SYMBOL,
 } from "~/lib/constants";
+import { utils } from "ethers";
 
 const heartsToHex = (hearts: number) => {
   return hearts / Number(HEARTS_PER_HEX);
@@ -64,4 +65,18 @@ const sharesToSI = (shares: number) => {
   return `${scaled.toFixed(1)} ${suffix}-Shares`;
 };
 
-export { format, heartsToHex, formatPercent, dayToFormattedDate, sharesToSI };
+const validateAddress = (address: string) => {
+  try {
+    return utils.getAddress(address);
+  } catch {
+    return null;
+  }
+};
+export {
+  format,
+  heartsToHex,
+  formatPercent,
+  dayToFormattedDate,
+  sharesToSI,
+  validateAddress,
+};

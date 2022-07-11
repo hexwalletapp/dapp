@@ -30,7 +30,7 @@ export const StakeCard: React.FC<{ stake: Stake }> = ({ stake }) => {
           </div>
           <div className="flex flex-1 flex-col min-w-0 flex-y-4">
             <p className="text-xl font-medium text-right">{stake.shares}</p>
-            <p className="text-base truncate text-right text-neutral-content">
+            <p className="text-base truncate text-right">
               {stake.startDate} - {stake.endDate}
             </p>
           </div>

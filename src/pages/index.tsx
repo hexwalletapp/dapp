@@ -12,6 +12,7 @@ import {
   formatPercent,
   dayToFormattedDate,
   sharesToSI,
+  validateAddress,
 } from "~/lib/utils";
 import { Menu, Transition } from "@headlessui/react";
 import { BookmarkIcon, LinkIcon, StarIcon } from "@heroicons/react/outline";
@@ -32,10 +33,13 @@ const userNavigation = [
 const Accounts: NextPage = () => {
   const [hexPrice, setHexPrice] = useState<number>(0);
   const [stakeAddress, setStakeAddress] = useState("");
+  const [validStakeAddress, setValidStakeAddress] = useState("");
+
   const [disableFilters, setDisableFilters] = useState(true);
   const { currentDay, dailyDataDays } = useHexDailyData(chain.mainnet.id);
+
   const { stakeCount: stakeCountETH, stakes: stakesETH } = useHexStakes(
-    stakeAddress,
+    validStakeAddress,
     chain.mainnet.id
   );
 
@@ -122,6 +126,10 @@ const Accounts: NextPage = () => {
   });
 
   useEffect(() => {
+    console.log(validateAddress(stakeAddress));
+    if (validateAddress(stakeAddress) != null) {
+      setValidStakeAddress(stakeAddress);
+    }
     if (stakes && stakes?.length > 0) {
       setDisableFilters(false);
     }
