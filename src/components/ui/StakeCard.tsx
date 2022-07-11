@@ -3,16 +3,14 @@ import type { Stake, LineItem } from "utils/account-types";
 export const StakeCard: React.FC<{ stake: Stake }> = ({ stake }) => {
   const TableLineItem: React.FC<{ lineItem: LineItem }> = ({ lineItem }) => {
     return (
-      <tr className="border-b border-gray-50">
+      <tr>
         <td className="py-4 pl-4 pr-3 text-sm sm:pl-6 md:pl-0">
-          <div className="text-xs text-gray-400 small-caps">
-            {lineItem.name}
-          </div>
+          <div className="text-xs small-caps">{lineItem.name}</div>
         </td>
-        <td className="py-4 px-3 text-right text-sm font-mono text-gray-600">
+        <td className="py-4 px-3 text-right text-sm font-mono">
           {lineItem.valueUSD}
         </td>
-        <td className="py-4 px-3 text-right text-sm font-mono text-gray-600">
+        <td className="py-4 px-3 text-right text-sm font-mono">
           {lineItem.valueHEX}
         </td>
       </tr>
@@ -24,29 +22,21 @@ export const StakeCard: React.FC<{ stake: Stake }> = ({ stake }) => {
   };
 
   return (
-    <div className="card card-compact shadow-xl text-primary-content bg-white pt-6">
+    <div className="card card-compact shadow-xl bg-base-100 pt-6">
       <div className="card-body">
         <div className="flex flex-1">
-          <div
-            className="radial-progress text-primary --value:50;"
-            style={progressStyle}
-          >
+          <div className="radial-progress text-primary" style={progressStyle}>
             {`${stake.percentComplete}%`}
           </div>
           <div className="flex flex-1 flex-col min-w-0 flex-y-4">
-            {/* <div className="text-base text-gray-900 text-right">
-              {stake.status}
-            </div> */}
-            <p className="text-xl font-medium text-gray-900 text-right">
-              {stake.shares}
-            </p>
-            <p className="text-base text-gray-500 truncate text-right">
+            <p className="text-xl font-medium text-right">{stake.shares}</p>
+            <p className="text-base truncate text-right text-neutral-content">
               {stake.startDate} - {stake.endDate}
             </p>
           </div>
         </div>
 
-        <table className="min-w-full divide-y divide-gray-300">
+        <table className="min-w-full divide-y">
           <thead>
             <tr>
               <th
@@ -55,13 +45,13 @@ export const StakeCard: React.FC<{ stake: Stake }> = ({ stake }) => {
               ></th>
               <th
                 scope="col"
-                className="py-3.5 px-3 text-right text-sm font-semibold text-gray-400 small-caps"
+                className="py-3.5 px-3 text-right text-sm font-semibold small-caps"
               >
                 USD
               </th>
               <th
                 scope="col"
-                className="py-3.5 pl-3 pr-4 text-right text-sm font-semibold text-gray-400 sm:pr-6 md:pr-0 small-caps"
+                className="py-3.5 pl-3 pr-4 text-right text-sm font-semibold sm:pr-6 md:pr-0 small-caps"
               >
                 HEX
               </th>
@@ -80,22 +70,12 @@ export const StakeCard: React.FC<{ stake: Stake }> = ({ stake }) => {
               ))}
           </tbody>
           <tfoot>
-            <th
-              className="border-b border-gray-300"
-              scope="row"
-              colSpan={3}
-            ></th>
-            {/* // where name is "TOTAL" */}
             {stake.lineItems
               .filter((lineItem) => lineItem.name.toLowerCase() === "total")
               .map((lineItem: LineItem, index: number) => (
                 <TableLineItem key={index} lineItem={lineItem} />
               ))}
-            <th
-              className="border-b border-gray-300"
-              scope="row"
-              colSpan={3}
-            ></th>
+            <th className="border-b" scope="row" colSpan={3}></th>
             {stake.lineItems
               .filter(
                 (lineItem) =>

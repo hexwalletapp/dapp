@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import Meta from "~/components/Meta";
 import LeftNav from "~/components/ui/LeftNav";
-import { SideMenuProvider } from "~/contexts/SideMenuContext";
 const Layout = ({ children }: any) => {
   const [mounted, setMounted] = useState(false);
 
@@ -14,12 +13,11 @@ const Layout = ({ children }: any) => {
   }
 
   return (
-    <div>
+    <div className="drawer drawer-mobile">
+      <input id="hwa-drawer" type="checkbox" className="drawer-toggle" />
       <Meta />
-      <SideMenuProvider>
-        <LeftNav />
-        {children}
-      </SideMenuProvider>
+      <div className="drawer-content">{children}</div>
+      <LeftNav />
     </div>
   );
 };

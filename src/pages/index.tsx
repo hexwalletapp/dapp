@@ -22,7 +22,6 @@ import {
   DotsVerticalIcon,
   ViewGridAddIcon,
 } from "@heroicons/react/solid";
-import SideMenuContext from "~/contexts/SideMenuContext";
 
 const userNavigation = [
   { name: "Your Profile", href: "#" },
@@ -35,7 +34,6 @@ function classNames(...classes) {
 }
 
 const Accounts: NextPage = () => {
-  const { setSidebarOpen } = useContext(SideMenuContext);
   const [hexPrice, setHexPrice] = useState<number>(0);
   const [stakeAddress, setStakeAddress] = useState("");
   const [disableFilters, setDisableFilters] = useState(true);
@@ -143,17 +141,15 @@ const Accounts: NextPage = () => {
   return (
     <>
       <div>
-        <div className="md:pl-64 flex flex-col flex-1">
+        <div className="flex flex-col flex-1">
           <div className="navbar py-4 px-4 sm:px-6 md:pl-2">
             <div className="flex-1 flex space-x-4 pr-4">
-              <button
-                type="button"
-                className="btn shadow-lg md:hidden"
-                onClick={() => setSidebarOpen(true)}
+              <label
+                htmlFor="hwa-drawer"
+                className="btn btn-primary shadow-lg drawer-button lg:hidden"
               >
-                <span className="sr-only">Open sidebar</span>
                 <MenuAlt2Icon className="h-6 w-6" aria-hidden="true" />
-              </button>
+              </label>
 
               <input
                 title="Stake Address"
@@ -265,7 +261,7 @@ const Accounts: NextPage = () => {
             <div className="py-6">
               <div className="px-4 sm:px-6 md:px-6">
                 {/* Replace with your content */}
-                <div className="grid lg:grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-6">
+                <div className="grid md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-6">
                   {stakes?.map((stake: Stake, index: number) => (
                     <div key={index}>
                       <StakeCard stake={stake} />
