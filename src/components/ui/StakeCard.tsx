@@ -5,7 +5,7 @@ export const StakeCard: React.FC<{ stake: Stake }> = ({ stake }) => {
     return (
       <tr>
         <td className="py-4 pl-4 pr-3 text-sm sm:pl-6 md:pl-0">
-          <div className="text-xs small-caps">{lineItem.name}</div>
+          <div className="text-xs small-caps truncate">{lineItem.name}</div>
         </td>
         <td className="py-4 px-3 text-right text-sm font-mono">
           {lineItem.valueUSD}
@@ -63,7 +63,7 @@ export const StakeCard: React.FC<{ stake: Stake }> = ({ stake }) => {
                 (lineItem) =>
                   lineItem.name.toLowerCase() === "principal" ||
                   lineItem.name.toLowerCase() === "interest" ||
-                  lineItem.name.toLowerCase() === "big pay day"
+                  lineItem.name.toLowerCase() === "bpd"
               )
               .map((lineItem: LineItem, index: number) => (
                 <TableLineItem key={index} lineItem={lineItem} />

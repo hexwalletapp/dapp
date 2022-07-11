@@ -28,7 +28,7 @@ const LeftNav = () => {
   return (
     <div className="drawer-side">
       <label htmlFor="hwa-drawer" className="drawer-overlay"></label>
-      <ul className="menu p-4 overflow-y-auto w-80 bg-base-100 text-base-content">
+      <ul className="menu p-4 overflow-y-auto w-56 bg-base-100 text-base-content">
         {navigation.map((item, index) => (
           <li key={index}>
             <a href={item.href}>

@@ -51,8 +51,8 @@ const Accounts: NextPage = () => {
     const principalUSD = principalHEX * hexPrice;
     const principal: LineItem = {
       name: "PRINCIPAL",
-      valueUSD: "$" + format(principalUSD),
-      valueHEX: format(principalHEX),
+      valueUSD: "$" + format(principalUSD, 2),
+      valueHEX: format(principalHEX, 0),
     };
 
     // Interest
@@ -62,8 +62,8 @@ const Accounts: NextPage = () => {
     const interestUSD = interestHEX * hexPrice;
     const interest: LineItem = {
       name: "INTEREST",
-      valueUSD: "$" + format(interestUSD),
-      valueHEX: format(interestHEX),
+      valueUSD: "$" + format(interestUSD, 2),
+      valueHEX: format(interestHEX, 0),
     };
 
     // Big Pay Day
@@ -74,9 +74,9 @@ const Accounts: NextPage = () => {
     );
     const bigPayDayHEX = heartsToHex(Number(bigPayDayHearts));
     const bigPayDay: LineItem = {
-      name: "BIG PAY DAY",
-      valueUSD: "$" + format(bigPayDayHEX * hexPrice),
-      valueHEX: format(bigPayDayHEX),
+      name: "BPD",
+      valueUSD: "$" + format(bigPayDayHEX * hexPrice, 2),
+      valueHEX: format(bigPayDayHEX, 0),
     };
 
     // Total
@@ -84,8 +84,8 @@ const Accounts: NextPage = () => {
     const totalUSD = totalHEX * hexPrice;
     const total: LineItem = {
       name: "TOTAL",
-      valueUSD: "$" + format(totalUSD),
-      valueHEX: format(totalHEX),
+      valueUSD: "$" + format(totalUSD, 2),
+      valueHEX: format(totalHEX, 0),
     };
 
     // ROI
