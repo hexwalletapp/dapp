@@ -1,4 +1,4 @@
-import HEXABI from "~/abi/HEXABI.json";
+import HEX from "~/abi/HEX.json";
 
 const DAY_ONE_START = 1_575_244_800;
 const ONE_DAY = 86400;
@@ -24,7 +24,7 @@ const USDC_CONTRACT_ADDRESS = "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48";
 
 const hexContract = {
   addressOrName: HEX_CONTRACT_ADDRESS,
-  contractInterface: HEXABI,
+  contractInterface: HEX,
 };
 
 const UNITS: { [key: string]: number } = {

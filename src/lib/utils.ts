@@ -67,7 +67,12 @@ const sharesToSI = (shares: number) => {
 
 const validateAddress = (address: string) => {
   try {
-    return utils.getAddress(address);
+    const regex = /^0x[0-9a-fA-F]{40}$/;
+    if (!regex.test(address)) {
+      return null;
+    } else {
+      return address;
+    }
   } catch {
     return null;
   }

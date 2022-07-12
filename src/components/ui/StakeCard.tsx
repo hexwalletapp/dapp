@@ -75,7 +75,7 @@ export const StakeCard: React.FC<{ stake: Stake }> = ({ stake }) => {
               .map((lineItem: LineItem, index: number) => (
                 <TableLineItem key={index} lineItem={lineItem} />
               ))}
-            <th className="border-b" scope="row" colSpan={3}></th>
+            {/* <tr className="border-b" scope="row" colSpan={3}></tr> */}
             {stake.lineItems
               .filter(
                 (lineItem) =>
