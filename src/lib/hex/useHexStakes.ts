@@ -15,7 +15,7 @@ import {
 } from "~/lib/utils";
 import { useEffect, useState } from "react";
 
-export const useHexStakes = (stakeAddress: string, chainId: number) => {
+export const useHexStakes = async (stakeAddress: string, chainId: number) => {
   const enableRead = validateAddress(stakeAddress) != null;
 
   const [hexPrice, setHexPrice] = useState(0);
